@@ -40,6 +40,10 @@ def goto_article_complete(request: Request, id_article: int, db: Session=Depends
     return templates.TemplateResponse("article.html", {"request": request, "article": article})
 
 ## 🔵 GET /edit/{id_article} -> Chama a pagina para edição do artigo
+@app.get("/edit/{id_article}")
+def goto_article_edit(request:Request, id_article: int, db: Session = Depends(get_db)):
+    article = db.query(models.Article).filter(models.Article.id == id_article).first()
+    return templates.TemplateResponse("edit.html", {"request": request, "article": article})
 
 
 
@@ -68,20 +72,18 @@ def delete_article(id_article: int, db: Session = Depends(get_db)):
 
 
 
-
-
 #-----------------Todos os PUT-----------------#
 
-# # 🟡 PUT /articles/{id} → atualizar artigo
-# @app.put("/articles/{id_article}")
-# def update_user(id_article: int, db : Session = Depends(get_db)):
-#     db_article = db.query(models.Article).filter(models.Article.id == id_article).first()
-#     if not db_article:
-#         raise HTTPException(status_code=404, detail="Article not found")
+# 🟡 PUT /edit/{id} → atualizar artigo
+@app.post("/edit/{id_article}")
+def update_article(id_article: int, title: str=Form(), content: str=Form(), db : Session = Depends(get_db)):
+    db_article = db.query(models.Article).filter(models.Article.id == id_article).first()
+    if not db_article:
+        raise HTTPException(status_code=404, detail="Article not found")
     
-#     db_article.title   = article.title
-#     db_article.content = article.content
-#     db.commit()
-#     db.refresh(db_article)
-#     return db_article
+    db_article.title   = title
+    db_article.content = content
+    db.commit()
+    db.refresh(db_article)
+    return RedirectResponse(url="/admin", status_code=303)
 

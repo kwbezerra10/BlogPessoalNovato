@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editando o artigo {{article.id}}</title>
+</head>
+<body>
+    <a href="/admin/">VOLTAR</a>
+
+
+    <form action="/edit/{{article.id}}" method="post">
+
+        <label for="title">Titulo:</label>
+        <input type="text" name="title" value="{{article.title}}">
+
+        <label for="content">Conteudo:</label>
+        <input type="text" name="content" value="{{article.content}}">
+
+         <button type="submit">Salvar</button>
+
+    </form>
+
+
+    
+</body>
+</html>
