@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    <h1>Personal Blog  <a href="/articles/new-article"><button>+ Add Artigo</button></h1> </a>
+    {% for article in articles %}
+        <p>
+            {{article.title}}
+            <form action="/delete/{{article.id}}" method="post">
+                <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">DELETE</button>
+            </form>
+            <a href="/edit/{{article.id}}">EDIT</a>
+        </p> 
+    {% endfor %}
+</body>
+</html>
