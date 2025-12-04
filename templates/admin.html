@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/admin.css">
     <title>Admin</title>
 </head>
 <body>
-    <h1>Personal Blog  <a href="/articles/new-article"><button>+ Add Artigo</button></h1> </a>
+    <nav>
+        <a href="/home">Home</a>
+        <a href="/admin">Admin</a>
+    </nav>
+    <h1>Personal Blog  <a href="/articles/new-article"><button class="button-add">+ Add Artigo</button></h1> </a>
     {% for article in articles %}
-        <p>
-            {{article.title}}
+        <div>
+            <p>{{article.title}}</p>
             <form action="/delete/{{article.id}}" method="post">
-                <button type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">DELETE</button>
+                <button  class="button-delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">DELETE</button>
             </form>
-            <a href="/edit/{{article.id}}">EDIT</a>
-        </p> 
+            <a  href="/edit/{{article.id}}"><button class="button-edit">EDIT</button></a>
+        </div>
     {% endfor %}
 </body>
 </html>

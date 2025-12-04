@@ -6,13 +6,19 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, engine, get_db
 import models
 
+
+
 #cria as tabelas
 models.Base.metadata.create_all(bind=engine)
 
+
+
 app = FastAPI()
 
-# Comfigurando a pasta de Templates.
-templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Configure os templates usando caminho absoluto também
+templates = Jinja2Templates(directory='templates')
 
 #-----------------Todos os GET-----------------#
 
