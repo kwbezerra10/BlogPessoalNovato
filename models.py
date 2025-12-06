@@ -9,3 +9,9 @@ class Article(Base):
     created_at = Column(DateTime, default=datetime.datetime.now)
     updated_at = Column(DateTime, default=None)
 
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    login = Column(String(50), unique=True)
+    hashed_password = Column(String(200))

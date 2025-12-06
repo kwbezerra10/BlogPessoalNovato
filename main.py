@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, get_db
+from utils import verify_password
 import models
 
 
@@ -33,11 +34,28 @@ def list_articles(request: Request, db: Session = Depends(get_db)):
     articles = db.query(models.Article).all()
     return templates.TemplateResponse("home.html", {"request": request, "articles": articles})
 
-# 🔵 GET /admin -> Chama a pagina de Admin
+# 🔵 GET /admin -> Chama a pagina de login para Admin
 @app.get("/admin")
-def goto_admin(request: Request, db: Session = Depends(get_db)):
+def goto_login(request: Request, db: Session = Depends(get_db)):    
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+# POST /admin/loged -> PAGINA DE ADMIN
+@app.post("/admin/loged")
+def goto_admin (request: Request, login: str=Form(), senha: str=Form(), db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.login == login).first()
+    if not user:
+        raise RedirectResponse(url="/login", status_code=303)
+
+    if not verify_password(senha, user.hashed_password):
+        raise RedirectResponse(url="/login", status_code=303)
+
     articles = db.query(models.Article).all()
+
+    
     return templates.TemplateResponse("admin.html", {"request": request, "articles": articles})
+
+
 
 ## 🔵 GET /article/{id_article} -> Chama a pagina com o article completo
 @app.get("/article/{id_article}")
@@ -64,6 +82,7 @@ def create_article(title: str=Form(), content: str=Form(), db: Session = Depends
     db.commit()    
     
     return RedirectResponse(url="/admin", status_code=303)
+
 
 
 # 🔴 POST /articles/{id} → deletar artigo
