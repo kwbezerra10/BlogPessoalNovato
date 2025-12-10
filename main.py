@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, get_db
+from utils import verify_password
 import models
 
 
@@ -34,6 +35,7 @@ def create_article_page (request: Request):
 def list_articles(request: Request, db: Session = Depends(get_db)):
     articles = db.query(models.Article).all()
     return templates.TemplateResponse("home.html", {"request": request, "articles": articles})
+
 
 # 🔵 GET /admin -> Chama a pagina de login
 @app.get("/admin")
@@ -83,6 +85,7 @@ def create_article(title: str=Form(), content: str=Form(), db: Session = Depends
     db.commit()    
     
     return RedirectResponse(url="/admin", status_code=303)
+
 
 
 # 🔴 POST /articles/{id} → deletar artigo
