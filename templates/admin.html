@@ -8,18 +8,22 @@
 </head>
 <body>
     <nav>
-        <a href="/home">Home</a>
-        <a href="/admin">Admin</a>
+        <a href="/home">Home</a>        
     </nav>
-    <h1>Personal Blog  <a href="/articles/new-article"><button class="button-add">+ Add Artigo</button></h1> </a>
-    {% for article in articles %}
-        <div>
-            <p>{{article.title}}</p>
-            <form action="/delete/{{article.id}}" method="post">
-                <button  class="button-delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">DELETE</button>
-            </form>
-            <a  href="/edit/{{article.id}}"><button class="button-edit">EDIT</button></a>
-        </div>
-    {% endfor %}
+    
+    
+        <h1>Personal Blog  <a href="/articles/new-article"><button class="button-add">+ Add Artigo</button></h1> </a>
+        {% for article in articles %}
+            <div>
+                <p>{{article.title}}</p>
+                <form action="/delete/{{article.id}}" method="post">
+                    <button  class="button-delete" type="submit" onclick="return confirm('Tem certeza que deseja excluir?')">DELETE</button>
+                </form>
+                <a  href="/edit/{{article.id}}"><button class="button-edit">EDIT</button></a>
+            </div>
+        {% endfor %}
+
+    </div>
+    
 </body>
 </html>

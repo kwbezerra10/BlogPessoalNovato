@@ -22,6 +22,8 @@ templates = Jinja2Templates(directory='templates')
 
 #-----------------Todos os GET-----------------#
 
+
+
 # 🔵 GET /articles/new-article → Chama a pagina do formulario de artigo
 @app.get("/articles/new-article")
 def create_article_page (request: Request):    
@@ -33,11 +35,12 @@ def list_articles(request: Request, db: Session = Depends(get_db)):
     articles = db.query(models.Article).all()
     return templates.TemplateResponse("home.html", {"request": request, "articles": articles})
 
-# 🔵 GET /admin -> Chama a pagina de Admin
+# 🔵 GET /admin -> Chama a pagina de login
 @app.get("/admin")
-def goto_admin(request: Request, db: Session = Depends(get_db)):
-    articles = db.query(models.Article).all()
-    return templates.TemplateResponse("admin.html", {"request": request, "articles": articles})
+def goto_admin_login(request: Request):    
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
 
 ## 🔵 GET /article/{id_article} -> Chama a pagina com o article completo
 @app.get("/article/{id_article}")
@@ -54,6 +57,22 @@ def goto_article_edit(request:Request, id_article: int, db: Session = Depends(ge
 
 
 #-----------------Todos os POST-----------------#
+
+# 🟢 POST /admin/logged -> valida usuario e redireciona para pagina de loggin.
+
+@app.post("/admin/logged")
+def goto_admin_page(request: Request, user: str=Form(), password: str=Form(), db: Session = Depends(get_db)):
+    user_admin_object = db.query(models.User).filter(models.User.id == 1).first()
+    
+    USER_ADMIN = user_admin_object.username
+    PASS_ADMIN = user_admin_object.password
+    if user == USER_ADMIN and password == PASS_ADMIN:
+        articles = db.query(models.Article).all()    
+        return templates.TemplateResponse("admin.html", {"request": request, "articles": articles})
+    else:
+        RedirectResponse(url="/admin", status_code=303)
+
+
 
 # 🟢 POST /articles -> Criar artigo
 @app.post("/articles")
